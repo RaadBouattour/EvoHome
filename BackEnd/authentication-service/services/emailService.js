@@ -1,33 +1,31 @@
+// services/emailService.js
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: false,
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   }
 });
 
-exports.sendVerificationEmail = async (userEmail, token) => {
-  const verificationLink = `http://localhost:4000/api/auth/verify-email?token=${token}`;
-
+exports.sendVerificationEmail = async (to, token) => {
+  const link = `http://localhost:4000/api/auth/verify?token=${token}`;
   await transporter.sendMail({
-    from: '"EvoHome" <no-reply@smarthome.com>',
-    to: userEmail,
-    subject: "Email Verification",
-    html: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`
+    from: process.env.EMAIL_USER,
+    to,
+    subject: "Verify your account",
+    html: `<p>Click <a href="${link}">here</a> to verify your account.</p>`
   });
 };
 
-exports.sendResetPasswordEmail = async (userEmail, resetToken) => {
-  const resetLink = `http://localhost:4000/api/auth/reset-password?token=${resetToken}`;
-
+exports.sendResetPasswordEmail = async (to, code) => {
   await transporter.sendMail({
-    from: '"Smart Home App" <no-reply@smarthome.com>',
-    to: userEmail,
-    subject: "Password Reset",
-    html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`
+    from: `"Auth App" <${process.env.EMAIL_USER}>`,
+    to,
+    subject: "🔁 Reset Your Password",
+    html: `
+      <p>Your verification code is: <strong>${code}</strong></p>
+    `
   });
 };

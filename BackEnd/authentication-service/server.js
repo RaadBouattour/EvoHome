@@ -1,19 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-require("dotenv").config();
-console.log("Loaded AUTH0_DOMAIN:", process.env.AUTH0_DOMAIN);
-
 const cors = require("cors");
-const passport = require("./src/services/auth0Service");
 const session = require("express-session");
+const passport = require("./services/auth0Service"); // ✅ Corrigé
 
 dotenv.config();
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-
 app.use(session({
   secret: process.env.JWT_SECRET,
   resave: false,
@@ -23,7 +19,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-const authRoutes = require("./src/routes/authRoutes");
+const authRoutes = require("./routes/authRoutes"); // idem ici : pas besoin de /src
 app.use("/api/auth", authRoutes);
 
 mongoose.connect(process.env.MONGO_URI)

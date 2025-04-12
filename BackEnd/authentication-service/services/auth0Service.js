@@ -1,5 +1,6 @@
 const passport = require("passport");
 const Auth0Strategy = require("passport-auth0");
+require("dotenv").config();
 
 passport.use(new Auth0Strategy(
   {
