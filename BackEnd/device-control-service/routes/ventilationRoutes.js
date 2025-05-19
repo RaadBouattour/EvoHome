@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/ventilationController');
-router.post('/toggle', controller.toggleVentilation);
+const ventilationController = require('../controllers/ventilationController');
+
+router.post('/control', ventilationController.controlVentilation);
+
 module.exports = router;

@@ -1,5 +1,4 @@
-// services/sttService.js
-const axios = require('axios');
+ const axios = require('axios');
 const fs = require('fs');
 
 const API_KEY = process.env.ASSEMBLYAI_API_KEY;

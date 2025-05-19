@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const session = require("express-session");
-const passport = require("./services/auth0Service"); // ✅ Corrigé
+const passport = require("./services/auth0Service"); 
+
 
 dotenv.config();
 const app = express();
@@ -19,7 +20,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-const authRoutes = require("./routes/authRoutes"); // idem ici : pas besoin de /src
+const authRoutes = require("./routes/authRoutes"); 
 app.use("/api/auth", authRoutes);
 
 mongoose.connect(process.env.MONGO_URI)

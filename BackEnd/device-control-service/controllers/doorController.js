@@ -10,11 +10,9 @@ exports.toggleDoor = async (req, res) => {
       return res.status(404).json({ error: `Door in room '${room}' not found.` });
     }
 
-    // 🔁 Envoyer la commande à l’ESP32 AVANT mise à jour DB
     try {
-      await axios.post(`http://esp32-ip/door`, { room, status });
+      await axios.post(`http://192.168.119.5/door`, { room, status });
 
-      // ✅ Si succès : mettre à jour MongoDB
       door.status = status;
       await door.save();
 

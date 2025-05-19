@@ -20,20 +20,25 @@ exports.requestPasswordReset = async (req, res) => {
 };
 
 exports.resetPassword = async (req, res) => {
-  const { email, code, newPassword } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) return res.status(404).json({ message: "User not found" });
+  try {
+    const { email, newPassword } = req.body;
 
-  const validCode = await VerificationCode.findOne({ userId: user._id, code });
-  if (!validCode) return res.status(400).json({ message: "Invalid or expired code" });
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-  const hashedPassword = await bcrypt.hash(newPassword, 10);
-  user.password = hashedPassword;
-  await user.save();
-  await VerificationCode.deleteMany({ userId: user._id });
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
 
-  res.json({ message: "Password reset successfully" });
+    await VerificationCode.deleteMany({ userId: user._id });
+
+    res.status(200).json({ message: "Password reset successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 };
+
 
 exports.sendVerificationEmail = async (to, token) => {
   const link = `http://localhost:4000/api/auth/verify?token=${token}`;
@@ -56,4 +61,6 @@ exports.sendVerificationEmail = async (to, token) => {
     `
   });
 };
+
+
 

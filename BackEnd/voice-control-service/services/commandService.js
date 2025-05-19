@@ -7,7 +7,6 @@ function parseCommand(text) {
 
   let endpoint, action, status, room;
 
-  // Detect device
   if (lower.includes('light')) {
     endpoint = 'lights';
   } else if (lower.includes('ventilation') || lower.includes('fan')) {
@@ -18,7 +17,6 @@ function parseCommand(text) {
     throw new Error('Device not recognized');
   }
 
-  // Detect action → we convert everything into correct `status` value
   if (lower.includes('turn on') || lower.includes('open')) {
     status = endpoint === 'doors' ? 'open' : true;
   } else if (lower.includes('turn off') || lower.includes('close')) {
@@ -27,14 +25,16 @@ function parseCommand(text) {
     throw new Error('Action not recognized');
   }
 
-  // Detect room (you can expand this)
+
   if (lower.includes('living room')) {
     room = 'living room';
   } else if (lower.includes('kitchen')) {
     room = 'kitchen';
   } else if (lower.includes('bedroom')) {
     room = 'bedroom';
-  } else {
+  } else if (lower.includes('entry')) {
+    room = 'entry';
+  }else {
     throw new Error('Room not recognized');
   }
 
