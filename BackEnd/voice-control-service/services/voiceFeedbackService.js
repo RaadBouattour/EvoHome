@@ -2,7 +2,7 @@ const axios = require('axios');
 
 async function speakFeedback(message) {
   try {
-    const response = await axios.post('http://192.168.63.166:5005/speak', {
+    const response = await axios.post('http://192.168.6.166:5003/api/speak', {
       text: message
     });
 
